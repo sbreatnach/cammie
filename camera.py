@@ -3,6 +3,7 @@ from __future__ import unicode_literals, absolute_import
 
 import cv2
 
+
 class VideoCamera(object):
     def __init__(self):
         # Using OpenCV to capture from device 0. If you have trouble capturing
@@ -21,5 +22,8 @@ class VideoCamera(object):
         # We are using Motion JPEG, but OpenCV defaults to capture raw images,
         # so we must encode it into JPEG in order to correctly display the
         # video stream.
-        ret, jpeg = cv2.imencode('.jpg', image)
-        return jpeg.tobytes()
+        ret, output = False, ''
+        if success:
+            ret, jpeg = cv2.imencode('.jpg', image)
+            output = jpeg.tostring()
+        return success and ret, output

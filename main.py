@@ -4,8 +4,10 @@ from __future__ import unicode_literals, absolute_import
 
 from flask import Flask, render_template, Response
 from camera import VideoCamera
+import time
 
 app = Flask(__name__)
+is_running = True
 
 
 @app.route('/')
@@ -14,8 +16,11 @@ def index():
 
 
 def gen(camera):
-    while True:
-        frame = camera.get_frame()
+    while is_running:
+        success, frame = camera.get_frame()
+        while not success:
+            time.sleep(0.1)
+            success, frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
