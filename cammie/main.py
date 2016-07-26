@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, absolute_import
 
-from flask import Flask, render_template, Response
-from camera import VideoCamera
 import time
+from flask import Flask, render_template, Response
+
+from cammie.camera import VideoCamera
 
 app = Flask(__name__)
 is_running = True
@@ -30,5 +31,10 @@ def video_feed():
     return Response(gen(VideoCamera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-if __name__ == '__main__':
+
+def main():
     app.run(host='0.0.0.0', debug=True)
+
+
+if __name__ == '__main__':
+    main()
