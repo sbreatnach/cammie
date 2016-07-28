@@ -1,4 +1,4 @@
-    sudo apt-get install python-pip python-opencv python-virtualenv
+    sudo apt-get install python-pip python-opencv python-virtualenv libpython-dev
     mkdir ~/venv
     cd ~/venv
     virtualenv --system-site-packages cammie
