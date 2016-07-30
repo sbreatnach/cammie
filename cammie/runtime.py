@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
 import signal
 import logging
 
@@ -7,11 +10,11 @@ def is_exit_signal(signum):
                       signal.SIGABRT, signal.SIGQUIT]
 
 
-def register_signal_listener(listener):
+def register_signal_listener(signaller, listener):
     def on_signal(signum=None, frame=None):
-        logging.info('SIGNAL %d received', signum)
+        logging.info('SIGNAL %d received', signum or 0)
         listener(signum)
 
     for sig in [signal.SIGTERM, signal.SIGINT, signal.SIGABRT, signal.SIGQUIT,
                 signal.SIGALRM, signal.SIGHUP, signal.SIGUSR1, signal.SIGUSR2]:
-        signal.signal(sig, on_signal)
+        signaller.signal(sig, on_signal)

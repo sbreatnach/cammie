@@ -1,4 +1,4 @@
-    sudo apt-get install python-pip python-opencv python-virtualenv libpython-dev
+    sudo apt-get install python-pip python-opencv python-virtualenv libpython-dev portaudio19-dev
     mkdir ~/venv
     cd ~/venv
     virtualenv --system-site-packages cammie
