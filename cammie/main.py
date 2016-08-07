@@ -8,7 +8,7 @@ import logging.config
 import gevent
 from gevent.wsgi import WSGIServer
 
-from cammie.runtime import register_signal_listener, is_exit_signal
+from cammie.runtime import register_signal_listener
 
 
 def main():
@@ -20,6 +20,10 @@ def main():
     parser.add_argument(
         '-l', '--log-level', default='INFO',
         help='logging level for the server'
+    )
+    parser.add_argument(
+        '--disable-video', action='store_true',
+        help='disable video feed for process'
     )
 
     args = parser.parse_args()
@@ -40,22 +44,19 @@ def main():
 
     # start A/V on separate threads. incoming requests view stream based on
     # injected A/V state
-    from cammie.record import VideoCamera, AudioRecorder
+    from cammie.record import VideoCamera
     camera = VideoCamera()
-    camera.start()
-    audio = AudioRecorder()
-    audio.start()
+    if not args.disable_video:
+        camera.start()
 
     from cammie.website import app
     app.camera = camera
-    app.audio = audio
     app.debug = args.debug or False
 
     http_server = WSGIServer(('0.0.0.0', 5000), app)
 
     # handle shutdown signals gracefully
     def shutdown(signum):
-        audio.destroy()
         camera.destroy()
         http_server.stop()
     register_signal_listener(gevent, shutdown)

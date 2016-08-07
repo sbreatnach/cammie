@@ -5,11 +5,6 @@ import signal
 import logging
 
 
-def is_exit_signal(signum):
-    return signum in [signal.SIGTERM, signal.SIGINT,
-                      signal.SIGABRT, signal.SIGQUIT]
-
-
 def register_signal_listener(signaller, listener):
     def on_signal(signum=None, frame=None):
         logging.info('SIGNAL %d received', signum or 0)
